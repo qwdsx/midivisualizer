@@ -54,7 +54,7 @@ const Home = () => {
 			<div className="w-full p-2 bg-zinc-800 flex flex-row gap-2">
 				<button
 					onClick={startButtonHandler}
-					className="p-2 bg-amber-300"
+					className="p-2 bg-amber-300 cursor-pointer"
 				>
 					Start
 				</button>
