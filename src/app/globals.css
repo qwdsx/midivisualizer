@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 @theme {
-  --animate-notefall: notefall 2s linear;
+  /* --animate-notefall: notefall 2s linear;
 
   @keyframes notefall {
     0% {
@@ -12,7 +12,7 @@
       opacity: 1;
       transform: translateY(-100%);
     }
-  }
+  } */
 }
 
 body {

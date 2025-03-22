@@ -8,6 +8,6 @@ export const calculatePlaybackDurationSeconds = (ticks: number, bpm: number, ppq
     return (60 / (bpm * ppq)) * ticks
 }
 
-export const fmtMSS = (seconds: number) => {
+export const fMSS = (seconds: number) => {
     return (seconds - (seconds %= 60)) / 60 + (9 < seconds ? ':' : ':0') + seconds
 }

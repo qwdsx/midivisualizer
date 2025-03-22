@@ -1,5 +1,5 @@
-import { note } from "@/util/types";
-import notes from '@/misc/notes.json';
+import { PianoKey as PianoKeyType } from "@/util/types";
+import pianoKeys from '@/misc/piano-keys.json';
 import PianoKey from "./PianoKey";
 
 interface PianoProps {
@@ -8,12 +8,12 @@ interface PianoProps {
 
 const Piano = ({ pressedKeys }: PianoProps) => {
     return (
-        <div className="flex flex-row absolute bottom-0 h-[250px] w-full z-100">
-            {notes.map((note: note, index: number) => {
-                let isKeyPressed = (pressedKeys.find(e => e === note.midiNumber)) ? true : false;
+        <div className="flex flex-row absolute bottom-0 h-[200px] w-full z-100">
+            {pianoKeys.map((pianoKey: PianoKeyType, index: number) => {
+                let isKeyPressed = (pressedKeys.find(e => e === pianoKey.midiNumber)) ? true : false;
                 return (
                     <PianoKey
-                        note={note}
+                        pianoKey={pianoKey}
                         isKeyPressed={isKeyPressed}
                         key={index}
                     />

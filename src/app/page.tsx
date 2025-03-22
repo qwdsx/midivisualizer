@@ -1,71 +1,58 @@
 'use client'
 import Navbar from "@/components/Navbar";
 import Piano from "@/components/piano/Piano";
-import * as fs from 'fs';
-import { Midi } from '@tonejs/midi';
 import * as Tone from "tone";
 import { useState } from "react";
-import test from "@/misc/unknown_1.json";
-import MidiVisualizer from "@/components/visualizer/MidiVisualizer";
-import { calculatePlaybackDurationSeconds } from "@/util/util";
-import { Duration } from "@/components/duration/Duration";
+import midiFileJson from "@/misc/unknown_1.json";
+import Visualizer from "@/components/visualizer/Visualizer";
 
 const Home = () => {
 	const [pressedKeys, setPressedKeys] = useState<number[]>([]);
+	const [timeouts, setTimeouts] = useState<NodeJS.Timeout[]>([]);
 	const [isPlaying, setIsPlaying] = useState(false);
 
-	const delayForNoteGraphics = (note: any) => {
-		setTimeout(() => {
+	const delayForPianoKeyGraphics = (note: any) => {
+		const timeoutAdd = setTimeout(() => {
 			setPressedKeys(prev => [...prev, note.midi]);
 		}, note.time * 1000)
-		setTimeout(() => {
+		const timeoutRemove = setTimeout(() => {
 			setPressedKeys(prev => prev.filter(e => e !== note.midi));
 		}, (note.time + note.duration) * 1000)
+
+		setTimeouts(prev => [...prev, timeoutAdd, timeoutRemove]);
 	}
 
-	const playbackDurationSeconds = calculatePlaybackDurationSeconds(test.tracks[0].endOfTrackTicks, test.header.ppq, test.header.tempos[0].bpm);
-
-	const startButtonHandler = async () => {
-		await Tone.start();
+	const startButtonHandler = () => {
+		Tone.getTransport().start();
         const synth = new Tone.PolySynth(Tone.Synth, {
 			"volume": -25,
 		}).toDestination();
-		const now = Tone.now();
-        test.tracks.forEach(track => {
+        midiFileJson.tracks.forEach(track => {
             track.notes.forEach(note => {
 		        synth.triggerAttackRelease(note.name, note.duration, note.time, note.velocity);
-				delayForNoteGraphics(note);
+				delayForPianoKeyGraphics(note);
             })
-
-            // //the control changes are an object
-            // //the keys are the CC number
-            // track.controlChanges[64]
-            // //they are also aliased to the CC number's common name (if it has one)
-            // track.controlChanges.sustains.forEach(cc => {
-            //     // cc.ticks, cc.value, cc.time
-            // })
         });
 		setIsPlaying(true);
 	}
 
+	const pauseButtonHandler = () => {
+		Tone.getTransport().pause();
+		timeouts.forEach(timeout => {
+			clearTimeout(timeout);
+		})
+		setPressedKeys([]);
+		setIsPlaying(false);
+	}
+
 	return (
 		<div>
-			{/* <Navbar /> */}
-			<div className="w-full p-2 bg-zinc-800 flex flex-row gap-2">
-				<button
-					onClick={startButtonHandler}
-					className="p-2 bg-amber-300 cursor-pointer"
-				>
-					Start
-				</button>
-				<div className="p-2 flex flex-row gap-1 text-white">
-					<p>Duration:</p>
-					<Duration isPlaying={isPlaying} durationSeconds={playbackDurationSeconds} />
-				</div>
-			</div>
-			
-			<div className="w-full h-full">
-				<MidiVisualizer pressedKeys={pressedKeys} />
+			<Navbar
+				startButtonHandler={startButtonHandler}
+				pauseButtonHandler={pauseButtonHandler}
+			/>
+			<div>
+				<Visualizer pressedKeys={pressedKeys} />
 				<Piano pressedKeys={pressedKeys} />
 			</div>
 		</div>

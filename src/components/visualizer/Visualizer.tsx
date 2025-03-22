@@ -1,10 +1,10 @@
 import VisualizerPiano from './VisualizerPiano';
 
-interface MidiVisualizerProps {
+interface VisualizerProps {
     pressedKeys: number[]
 }
 
-const MidiVisualizer = ({ pressedKeys }: MidiVisualizerProps) => {
+const Visualizer = ({ pressedKeys }: VisualizerProps) => {
     return (
         <div className="flex flex-row h-full w-full">
 			<VisualizerPiano pressedKeys={pressedKeys} />
@@ -12,4 +12,4 @@ const MidiVisualizer = ({ pressedKeys }: MidiVisualizerProps) => {
     )
 }
 
-export default MidiVisualizer;
+export default Visualizer;
