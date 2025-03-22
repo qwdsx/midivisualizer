@@ -5,4 +5,4 @@
 Currently only works well on screens that are 1920 pixels wide.
 
 ### Preview
-https://github.com/user-attachments/assets/ef76aa66-1028-443e-895e-d6e66fc411cc
+https://github.com/user-attachments/assets/6895dee9-e7e7-43ef-b5b8-5151f4c653ce
